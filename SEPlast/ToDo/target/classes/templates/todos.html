@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #c9d6ff, #e2e2e2);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      margin-top: 3rem;
+      padding: 2rem 3rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 2rem;
+    }
+
+    li {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+    }
+
+    .completed {
+      color: green;
+      font-weight: bold;
+    }
+
+    .incomplete {
+      color: red;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .logout {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .logout a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .logout a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Your To-Do List</h2>
+
+    <!-- Display list of todos -->
+    <ul>
+      <li th:each="todo : ${todos}">
+        <span th:text="${todo.task}"></span>
+        <span th:class="${todo.completed ? 'completed' : 'incomplete'}"
+              th:text="${todo.completed ? '✔ Completed' : '❌ Incomplete'}"></span>
+      </li>
+    </ul>
+
+    <!-- Add new todo -->
+    <h3>Add a New Task</h3>
+    <form th:action="@{/todos}" method="post" th:object="${todo}">
+      <div>
+        <input type="text" th:field="*{task}" placeholder="New task" required />
+        <div th:if="${#fields.hasErrors('task')}" th:errors="*{task}" class="error"></div>
+      </div>
+      <button type="submit">Add</button>
+    </form>
+
+    <!-- Optional logout link -->
+    <div class="logout">
+      <p><a th:href="@{/logout}">Logout</a></p>
+    </div>
+  </div>
+</body>
+</html>
